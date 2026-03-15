@@ -2,6 +2,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.exceptions import PermissionDenied
 from .models import Delivery
 from .serializers import DeliverySerializer
 from accounts.models import Sender, Rider
@@ -14,7 +15,14 @@ class CreateDeliveryView(APIView):
     permission_classes = [IsAuthenticated, IsSender]
 
     def post(self, request):
-        sender = Sender.objects.get(user=request.user)
+        sender = Sender.objects.filter(user=request.user).first()
+
+        if not sender:
+            return Response(
+                {"error": "Sender profile not found"},
+                status=400
+            )
+        
         serializer = DeliverySerializer(data=request.data)
         if serializer.is_valid():
             serializer.save(sender=sender)
@@ -114,7 +122,7 @@ class UpdateDeliveryStatusView(APIView):
     def patch(self, request, pk):
         rider = Rider.objects.get(user=request.user)
         try:
-            delivery = Delivery.objects.filter(id=pk, rider=rider)
+            delivery = Delivery.objects.get(id=pk, rider=rider)
         except Delivery.DoesNotExist:
             return Response({'error': 'Delivery not found'}, status=404)
         

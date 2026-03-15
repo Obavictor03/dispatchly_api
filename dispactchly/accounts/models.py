@@ -80,7 +80,7 @@ class Rider(models.Model):
     ]
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     phone_number = models.CharField(max_length=20, blank=True)
-    vehicle_type = models.CharField(max_length=20, choices=VEHICLE_CHOICES, null=True, blank=True)
+    vehicle_type = models.CharField(max_length=20, choices=VEHICLE_CHOICES, default='bike')
     availability_status = models.CharField(max_length=20, choices=AVAILABILITY_CHOICES, default='offline')
     current_latitude = models.DecimalField(max_digits=9, decimal_places=6, null=True, blank=True)
     current_longitude = models.DecimalField(max_digits=9, decimal_places=6, null=True, blank=True)

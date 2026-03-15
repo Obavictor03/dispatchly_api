@@ -10,5 +10,5 @@ urlpatterns = [
     path('<int:pk>/accept/', AcceptDeliveryView.as_view()),
     path('<int:pk>/status/', UpdateDeliveryStatusView.as_view()),
     path('rider/my-deliveries/', RiderDeliveryView.as_view()),
-    path('rider/availablity/', UpdateAvailabilityView.as_view()),
+    path('rider/availability/', UpdateAvailabilityView.as_view()),
 ]

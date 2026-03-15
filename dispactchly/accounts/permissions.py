@@ -3,8 +3,7 @@ from rest_framework.permissions import BasePermission
 class IsSender(BasePermission):
     def has_permission(self, request, view):
         return (
-            request.user_is_authenticated 
-            and hasattr(request.user, 'sender')
+            request.user.is_authenticated 
             and request.user.role == 'sender'
         )
     
@@ -12,8 +11,7 @@ class IsSender(BasePermission):
 class IsRider(BasePermission):
     def has_permission(self, request, view):
         return (
-            request.user_is_authenticated 
-            and hasattr(request.user, 'rider')
+            request.user.is_authenticated 
             and request.user.role == 'rider'
         )
     

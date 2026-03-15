@@ -12,6 +12,30 @@ class RegisterView(generics.CreateAPIView):
     serializer_class = UserRegistrationSerializer
     permission_classes = [AllowAny]
 
+    def perform_create(self, serializer):
+        user = serializer.save()
+        
+        if user.role == "seller":
+            # Check if profile exists
+            sender_profile, created = Sender.objects.get_or_create(
+                user=user,
+                defaults={
+                    "business_name": "",
+                    "phone_number": "",
+                    "pickup_latitude": 0,
+                    "pickup_longitude": 0
+                }
+            )
+        elif user.role == "rider":
+            rider_profile, created = Rider.objects.get_or_create(
+                user=user,
+                defaults={
+                    "phone_number": "",
+                    "vehicle_type": "bike",
+                    "availability_status": "offline"
+                }
+            )
+
 
 class UserDashboardView(APIView):
     permission_classes = [IsAuthenticated]
